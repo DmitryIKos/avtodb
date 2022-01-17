@@ -119,5 +119,3 @@ left join avto a on a.id=s.id_avto
 where s.s_date between '01.01.2020' and '31.12.2020'
 
 order by 1
-
-SELECT * FROM AVTO
