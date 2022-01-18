@@ -42,10 +42,13 @@
 <img src=https://github.com/DmitryIKos/avtodb/blob/main/a_type.JPG>
 <img src=https://github.com/DmitryIKos/avtodb/blob/main/sell.JPG></p>
 
-автомобили Avto               справочник автомобилей a_type         продажи Sell
+Автомобили Avto               справочник автомобилей a_type         продажи Sell
 
 
 Отчеты обьеденены в общую таблицу с помощью UNION
+
+[скрипт выполнения запросов](https://github.com/DmitryIKos/avtodb/blob/main/sel.sql)
 <br>
 <img src=https://github.com/DmitryIKos/avtodb/blob/main/sel.JPG>
+<br><img src=https://github.com/DmitryIKos/avtodb/blob/main/sel2.JPG>
 
