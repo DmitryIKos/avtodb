@@ -1,18 +1,24 @@
 /*
-	я│п╬п╥п╢п╟я┌я▄ п▒п■ п░п╡я┌п╬п╪п╬п╠п╦п╩п╣п╧ я│ я┌п╟п╠п╩п╦я├п╟п╪п╦:
-	п÷я─п╬п╢п╟п╤п╦, п░п╡я┌п╬п╪п╬п╠п╦п╩п╦, п°п╬п╢п╣п╩я▄ п╟п╡я┌п╬п╪п╬п╠п╦п╩я▐
-	п▓я▀п╠я─п╟я┌я▄ п╦п╫я└п╬я─п╪п╟я├п╦я▌ п╬ п╨п╬п╩п╦я┤п╣я│я┌п╡п╣ п╦ я│я┐п╪п╪п╣ п©я─п╬п╢п╟п╤ п╥п╟ 2020 пЁп╬п╢ п©п╬:
-	п╒п╦п©п╟п╪ п╟п╡я┌п╬п╪п╬п╠п╦п╩п╣п╧,
-	п╒п╦п©п╟п╪ п©п╬п╨я┐п©п╟я┌п╣п╩п╣п╧.
-	п÷п╬п╢п╡п╣я│я┌п╦ п╦я┌п╬пЁ
+	создать БД Автомобилей с таблицами:
+	Продажи, Автомобили, Модель автомобиля
+	Выбрать информацию о количестве и сумме продаж за 2020 год по:
+	Типам автомобилей,
+	Типам покупателей.
+	Подвести итог
 */
---я┐п╢п╟п╩п╣п╫п╦п╣ п╠п╟п╥я▀ п╢п╟п╫п╫я▀я┘
+--удаление базы данных
+
 /*
+alter table avto drop constraint   FK_Models
+alter table sell drop constraint   FK_Sales
+
 drop table avto
 drop table a_type
-drop database Avto
---я│п╬п╥п╢п╟п╫п╦п╣ п╠п╟п╥я▀
+drop table sell
 
+--drop database Avto
+--создание базы
+-- create database Avto
 create table avto(
 	id int identity primary key,
 	price numeric(18,2),
@@ -32,7 +38,7 @@ create table a_type(
 	model nchar(10)
 )
 
--- я│п╬п╥п╢п╟п╫п╦п╣ я│п╡я▐п╥п╣п╧
+-- создание связей
 alter table avto
 add 
   constraint FK_Models
@@ -45,7 +51,7 @@ add
     foreign key (id_avto) references avto(id)
 
 
---п╡п╡п╬п╢ п╢п╟п╫п╫я▀я┘
+--ввод данных
 
 insert into a_type (model)
   values
@@ -71,23 +77,23 @@ insert into avto (price,id_type)
 
 insert into sell (id_avto,s_count,s_date,customer_type)
   values
-    ('2','1', '01.12.2020','1'),
-	('1','1', '15.05.2020','1'),
-	('5','1', '20.07.2019','1'),
-	('3','3', '04.11.2020','2'),
-	('2','1', '25.02.2020','1'),
-	('1','1', '12.03.2020','1'),
-	('3','1', '19.08.2020','1'),
-	('5','1', '14.02.2019','1')
-
-
+    ('2','1',CONVERT(date,'01.12.2020',104),'1'),
+	('1','1',CONVERT(date,'15.05.2020',104),'1'),
+	('5','1',CONVERT(date,'20.07.2019',104),'1'),
+	('3','3',CONVERT(date,'04.11.2020',104),'2'),
+	('2','1',CONVERT(date,'25.02.2020',104),'1'),
+	('1','1',CONVERT(date,'12.03.2020',104),'1'),
+	('3','1',CONVERT(date,'19.08.2020',104),'1'),
+	('5','1',CONVERT(date,'14.02.2019',104),'1')
 */
+
+
 --------------------------------
-select 1 as 'п²п╬п╪п╣я─ п╬я┌я┤п╣я┌п╟', 
-'п÷п╬ я┌п╦п©п╟п╪ п╟п╡я┌п╬' as 'п²п╟п╥п╡п╟п╫п╦п╣ п╬я┌я┤п╣я┌п╟', 
-isnull(sum(s.s_count), 0) as 'п п╬п╩-п╡п╬ п╟п╡я┌п╬',
-isnull(sum(a.price*s.s_count), 0) as 'п║я┐п╪п╪п╟', 
- t.model as 'п°п╟я─п╨п╟', count(s.id) as 'п -п╡п╬ п©я─п╬п╢п╟п╤'
+select 1 as 'Номер отчета', 
+'По типам авто' as 'Название отчета', 
+isnull(sum(s.s_count), 0) as 'Кол-во авто',
+isnull(sum(a.price*s.s_count), 0) as 'Сумма', 
+ t.model as 'Марка', count(s.id) as 'К-во продаж'
 from a_type t
 left join avto a on a.id_type=t.id
 left join sell s  on s.id_avto=a.id 
@@ -97,43 +103,43 @@ group by t.model
 
 union
 
-select 2 as 'п²п╬п╪п╣я─ п╬я┌я┤п╣я┌п╟', 'п÷п╬ я┌п╦п©п╟п╪ п©п╬п╨я┐п©п╟я┌п╣п╩п╣п╧' as  'п²п╟п╥п╡п╟п╫п╦п╣ п╬я┌я┤п╣я┌п╟', sum( s.s_count) as 'п п╬п╩-п╡п╬ п╟п╡я┌п╬', 
-sum(a.price*s.s_count) as 'п║я┐п╪п╪п╟', 
+select 2 as 'Номер отчета', 'По типам покупателей' as  'Название отчета', sum( s.s_count) as 'Кол-во авто', 
+sum(a.price*s.s_count) as 'Сумма', 
 (CASE   
-      WHEN s.customer_type=1 THEN 'п╓п╦п╥.п╩п╦я├п╬'   
-      WHEN s.customer_type=2 THEN 'п╝я─.п╩п╦я├п╬'  
-   END   ) as 'п°п╟я─п╨п╟',
-  count(s.id) as 'п -п╡п╬ п©я─п╬п╢п╟п╤'
+      WHEN s.customer_type=1 THEN 'Физ.лицо'   
+      WHEN s.customer_type=2 THEN 'Юр.лицо'  
+   END   ) as 'Марка',
+  count(s.id) as 'К-во продаж'
 from sell s
 left join avto a on a.id=s.id_avto
 where s.s_date between CONVERT(date,'01.01.2020',104) and CONVERT(date,'31.12.2020',104)
 group by s.customer_type
 union
 
-select 3 as 'п²п╬п╪п╣я─ п╬я┌я┤п╣я┌п╟', 'п≤я┌п╬пЁ' as  'п²п╟п╥п╡п╟п╫п╦п╣ п╬я┌я┤п╣я┌п╟', sum( s.s_count) as 'п п╬п╩-п╡п╬ п╟п╡я┌п╬', 
-sum(a.price*s.s_count) as 'п║я┐п╪п╪п╟', 
-   '' as type_object, count(s.id) as 'п -п╡п╬ п©я─п╬п╢п╟п╤'
+select 3 as 'Номер отчета', 'Итог' as  'Название отчета', sum( s.s_count) as 'Кол-во авто', 
+sum(a.price*s.s_count) as 'Сумма', 
+   '' as type_object, count(s.id) as 'К-во продаж'
 from sell s
 left join avto a on a.id=s.id_avto
 where s.s_date between  CONVERT(date,'01.01.2020',104) and CONVERT(date,'31.12.2020',104)
 
 order by 1
 /*
- я│п╢п╣п╩п╟я┌я▄ п╬я┌я┤п╣я┌, я│п╬п╢п╣я─п╤п╟я┴п╦п╧ п╢п╟п╫п╫я▀п╣ п©п╬я│п╩п╣п╢п╫п╦я┘ п©я─п╬п╢п╟п╤ п╦я│п©п╬п╩я▄п╥я┐я▐ п©я─п╣п╢п╩п╬п╤п╣п╫п╦п╣ OVER. 
+ сделать отчет, содержащий данные последних продаж используя предложение OVER. 
 */
 
 
 select 
 distinct
-s.id,t.id, t.model as 'п╪п╟я─п╨п╟', s.s_count as 'п╨п╬п╩п╦я┤п╣я│я┌п╡п╬', a.price as 'я├п╣п╫п╟',
-	sum(s.s_count) over(partition by s.id_avto) as 'п п╬п╩-п╡п╬ п©я─п╬п╢п╟п╫п╫я▀я┘ п╟п╡я┌п╬ п╢п╟п╫п╫п╬п╧ п╪п╟я─п╨п╦',
-	sum(s.s_count*a.price) over(partition by a.id) as 'п║я┐п╪п╪п╟',
-	count(s.id_avto) over(partition by s.id_avto) as 'п -п╡п╬ п©я─п╬п╢п╟п╤', 
-	max(s.s_date) over(partition by s.id_avto) as 'п©п╬я│п╩ п©я─п╬п╢п╟п╤п╟'
+s.id,t.id, t.model as 'марка', s.s_count as 'количество', a.price as 'цена',
+	sum(s.s_count) over(partition by s.id_avto) as 'Кол-во проданных авто данной марки',
+	sum(s.s_count*a.price) over(partition by a.id) as 'Сумма',
+	count(s.id_avto) over(partition by s.id_avto) as 'К-во продаж', 
+	max(s.s_date) over(partition by s.id_avto) as 'посл продажа'
  
 from sell s
 left join avto a on a.id=s.id_avto
 left join a_type t on t.id=a.id_type 
 
---group by s.id
+
 order by t.model
