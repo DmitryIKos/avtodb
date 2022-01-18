@@ -2,15 +2,15 @@
 <p/>Задача:
 	<br>Создать БД Автомобилей с таблицами:
 	
-	 * Продажи
-	 * Автомобили
-	 * Модель автомобиля
+	 -  Продажи
+	 -  Автомобили
+	 -  Модель автомобиля
 Выбрать информацию о количестве и сумме продаж за 2020 год по:
 
 
-	  * Типам автомобилей,
-	  * Типам покупателей.
-  	  * Подвести итог
+	  - Типам автомобилей,
+	  - Типам покупателей.
+  	  - Подвести итог
 	  
 	  
     Создать отчет, содержащий данные последних продаж используя предложение OVER. 
@@ -34,9 +34,18 @@
 
 Для устранения неверного ввода было применено преобразование данных в формат DATE
 
-[скритп ввода данных](https://github.com/DmitryIKos/avtodb/blob/main/ins_data.sql)
+[скрипт ввода данных](https://github.com/DmitryIKos/avtodb/blob/main/ins_data.sql)
+
+Получили таблицы
+<p/>
+<img src=https://github.com/DmitryIKos/avtodb/blob/main/avto.JPG alt="автомобили">
+<img src=https://github.com/DmitryIKos/avtodb/blob/main/a_type.JPG>
+<img src=https://github.com/DmitryIKos/avtodb/blob/main/sell.JPG></p>
+
+автомобили Avto               справочник автомобилей a_type         продажи Sell
+
 
 Отчеты обьеденены в общую таблицу с помощью UNION
-
-
+<br>
+<img src=https://github.com/DmitryIKos/avtodb/blob/main/sel.JPG>
 
